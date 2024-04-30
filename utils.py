@@ -1,10 +1,14 @@
 
 import base64
+import logging
 import webbrowser
 from itertools import cycle
 from typing import Dict, Any, Union
 
 import constants
+
+
+logger = logging.getLogger('AppLogger')
 
 
 def get_obfuscated_data(key: str, app_config: Dict) -> str:
@@ -35,7 +39,7 @@ def encode_to_base64(data: Union[str, bytes]) -> str:
         return base64.b64encode(data).decode()
 
     except Exception as e:
-        print(f"Error encoding data to Base64: {str(e)}")
+        logger.error("Error encoding data to Base64: %s", str(e))
         return ''
 
 
@@ -44,11 +48,12 @@ def decode_from_base64(b64_string: bytes) -> bytes:
         return base64.b64decode(b64_string)
 
     except Exception as e:
-        print(f"Error decoding Base64 string: {str(e)}")
+        logger.error("Error decoding Base64 string: %s", str(e))
         return bytes()
 
 
 def open_url(url: str) -> None:
+    logger.info("Navigating to %s", url)
     webbrowser.open_new_tab(url)
 
 

@@ -1,11 +1,13 @@
 
+import logging
 import os
 import webbrowser
 
 from typing import Dict
 
 import tkinter as tk
-from tkinter import ttk, messagebox, Toplevel, Listbox, Scrollbar, Entry, Button
+from tkinter import ttk, messagebox, Toplevel, Listbox, Scrollbar, Entry, Button, scrolledtext
+from tkinter import font as tk_font
 
 import constants
 import email_operations
@@ -13,9 +15,21 @@ import serializer
 import utils
 
 
+logger = logging.getLogger('AppLogger')
+
+
 # ============================================================================
 
 
+def get_logging_widget(root: tk):
+    return tk.scrolledtext.ScrolledText(
+        root,
+        state='disabled',
+        height=10, font=tk_font.Font(family="Consolas", size=6)
+    )
+
+
+# ============================================================================
 def setup_hotlink_buttons(root: tk) -> None:
     button_frame = tk.Frame(root)
     button_frame.pack(side=tk.TOP, padx=20, pady=(20, 10), fill=tk.X)
@@ -144,9 +158,7 @@ def save_credentials(password_window: tk.Toplevel, username, password, app_confi
     obf_password = utils.encode_to_base64(obf_password)
     app_config['email_credentials']['google_email_app_password'] = obf_password
 
-    print("Credentials saved:", username, password)
-    print(f"{app_config['email_credentials']['google_email_address']=}")
-    print(f"{app_config['email_credentials']['google_email_app_password']=}")
+    logger.info("Email Credentials saved successfully.")
 
     toggle_x(app_config)
 
@@ -155,15 +167,17 @@ def save_credentials(password_window: tk.Toplevel, username, password, app_confi
 
 def open_file_with_default_editor(file_path: str) -> None:
     try:
+
         if os.path.exists(file_path):
             file_url = 'file://' + os.path.abspath(file_path)
             webbrowser.open(file_url)
         else:
+            logger.error("File does not exist: %s", file_path)
             messagebox.showinfo("ERROR: Open File", f"File does not exist: {file_path}")
-            # TODO: Log error
+
     except Exception as e:
+        logger.error("Failed to open file: %s", str(e))
         messagebox.showinfo("ERROR: Open File", f"Failed to open file {e}")
-        # TODO: Log exception
 
 
 # ============================================================================
@@ -365,8 +379,31 @@ def run_operations(app_config: Dict) -> None:
 
     serializer.save_configuration_to_file(app_config)
 
+# ============================================================================
+
+
+def kill(root: tk):
+    # Schedule app death
+    root.after(2000, root.destroy)  # auto-close in milliseconds
+
+    title = "Application Closing!"
+    logger.info(title)
+
+    try:
+        messagebox.showinfo(
+            title,
+            f"Configuration has been saved successfully.\n\nThe app will close shortly.",
+        )
+        # If the user clicks 'OK', immediately destroy the root to avoid waiting for the timeout
+        root.destroy()
+
+    except tk.TclError:
+        # Prevents log from complaining about popups which aren't closed.
+        pass
+
 
 # ============================================================================
+
 
 def toggle_x(app_config: Dict):
     """Sorry for the mess!"""
