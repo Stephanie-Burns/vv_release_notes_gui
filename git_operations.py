@@ -9,7 +9,7 @@ def push_to_github(commit_message="Updates"):
     try:
         repo.git.add(A=True)
         repo.index.commit(commit_message)
-        origin = repo.remote(name='origin')
+        origin = repo.remote(name='origin/main')
         origin.push()
         print("Changes pushed to GitHub.")
     except Exception as e:
