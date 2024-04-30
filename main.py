@@ -55,6 +55,4 @@ def main():
 
 
 if __name__ == "__main__":
-    import git_operations as g
-    g.push_to_github()
     main()
