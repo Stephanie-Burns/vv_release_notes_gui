@@ -1,6 +1,7 @@
 
 import base64
 import logging
+import os
 import webbrowser
 from itertools import cycle
 from typing import Dict, Any, Union
@@ -66,3 +67,7 @@ def get_config_value(value: str, config: dict) -> Any:
 
     except AttributeError:
         return out if out else None
+
+
+def get_src_dir():
+    return os.path.dirname(os.path.abspath(__file__))

@@ -4,11 +4,13 @@ import tkinter as tk
 import gui
 import logger_config
 import serializer
+import utils
 
 
 # TODO: block extra windows from spawning when an element which loads a frame is clicked
 # TODO: edit button for web addresses
 # TODO: stop saving download address
+# TODO: Halt execution in `run` if the download address is provided and bad
 
 
 def on_app_close(root, app_config):
@@ -18,6 +20,8 @@ def on_app_close(root, app_config):
 
 
 def main():
+    import os
+    print(utils.get_src_dir())
     root = tk.Tk()
     root.title("Release Notes Manager")
 
@@ -51,4 +55,6 @@ def main():
 
 
 if __name__ == "__main__":
+    import git_operations as g
+    g.push_to_github()
     main()
