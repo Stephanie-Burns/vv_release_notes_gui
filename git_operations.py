@@ -18,7 +18,7 @@ def push_to_github(commit_message="Updates"):
 
 # Example usage
 if __name__ == "__main__":
-    # push_to_github("Updated the project with new changes.")
+    push_to_github("Updated the project with new changes.")
 
     def check_remote_url(repo):
         for remote in repo.remotes:
