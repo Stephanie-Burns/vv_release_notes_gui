@@ -24,8 +24,8 @@ def main():
     # Logging setup
     log_widget = gui.get_logging_widget(root)
     logger = logger_config.setup_logging(log_widget)
-    logger.info("=" * 74)
-    logger.info("Logging started...")
+    logger.info("=" * 70)
+    logger.info("Application Started!")
 
     # Config Setup
     app_config = serializer.load_configuration_from_file()
