@@ -18,4 +18,14 @@ def push_to_github(commit_message="Updates"):
 
 # Example usage
 if __name__ == "__main__":
-    push_to_github("Updated the project with new changes.")
+    # push_to_github("Updated the project with new changes.")
+
+    def check_remote_url(repo):
+        for remote in repo.remotes:
+            print(f'{remote.name} URL: {remote.url}')
+
+
+    # Usage
+    repo_dir = os.path.dirname(os.path.abspath(__file__))
+    repo = git.Repo(repo_dir)
+    check_remote_url(repo)
